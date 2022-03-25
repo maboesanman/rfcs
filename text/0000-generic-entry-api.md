@@ -138,7 +138,7 @@ A collection implementing `GetEntryByKey` can take any borrow of a key and retur
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
 
-As this is an rfc for the standard library, I think the reference-level explanation is best conveyed via documentation, [which is hosted here](https://maboesanman.github.io/InPlace/in_place/)
+As this is an rfc for the standard library, I think the reference-level explanation is best conveyed via documentation, [which is hosted here.](https://maboesanman.github.io/InPlace/in_place/) and [repo here.](https://github.com/maboesanman/InPlace)
 
 As far as how this meshes with the existing entry api, I suggest leaving it as is, and making new methods. `GetEntryByKey::get_entry` was deliberately named to avoid conflicting with `HashMap::entry` or `BTreeMap::entry`. The only name collision with any collection in `std` is `GetEntryByKey::remove_entry`, which can be renamed, though I haven't thought of a good candidate for it. "Entry" could be replaced with "Slot" in all methods, traits, and enums without losing much intuitive meaning, then all names could be consistent.
 
@@ -171,9 +171,9 @@ This should also block stabilization of linked list cursors, as there is a large
 # Drawbacks
 [drawbacks]: #drawbacks
 
-- This hierarchy of traits is complex, and while this is an advanced feature, it may still lead to frustration. The traits were designed to be maximally flexible while still being useful, but they may be a little too all encompassing. A more modest approach that focuses solely on keyed-value collections may be more digestible.
-
+- This hierarchy of traits is complex, and while this is intended to be an advanced feature, it may still lead to frustration. The traits were designed to be maximally flexible while still being useful, but they may be a little too all encompassing. A more modest approach that focuses solely on keyed-value collections may be more digestible.
 - The traits on collections will remain unstable while generic associated types are unstable.
+- Having many traits can be frustrating when trying to keep them all in scope.
 
 # Rationale and alternatives
 [rationale-and-alternatives]: #rationale-and-alternatives
@@ -185,27 +185,18 @@ This should also block stabilization of linked list cursors, as there is a large
 # Prior art
 [prior-art]: #prior-art
 
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- For language, library, cargo, tools, and compiler proposals: Does this feature exist in other programming languages and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about the lessons from other languages, provide readers of your RFC with a fuller picture.
-If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from other languages.
-
-Note that while precedent set by other languages is some motivation, it does not on its own motivate an RFC.
-Please also take into consideration that rust sometimes intentionally diverges from common language features.
+As far as I know this is the first attempt to make the entry api generic across collections. The prior art here is mostly merged into the standard library already. The various entry related apis are already usable in `std` today, but they could be more generic and more useful.
 
 # Unresolved questions
 [unresolved-questions]: #unresolved-questions
 
+- How should the `remove_entry` name collision be resolved?
+- How should the various entry structs be named?
 - What helper methods should be provided on the various traits for convenience?
 - What types (collections or otherwise) should implement these traits?
 - Can the ergonomics of the many different entry traits be improved by something like an `OccupiedEntryExt` trait? Is there a better way to improve ergonomics?
 - What should be `#[inline]`'d?
+- are there any unforeseen implementation gotchas?
 
 # Future possibilities
 [future-possibilities]: #future-possibilities
